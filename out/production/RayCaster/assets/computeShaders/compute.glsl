@@ -14,7 +14,7 @@ struct Player {
     float r;
 };
 
-layout (local_size_x = 100) in;
+layout (local_size_x = 1) in;
 layout (rgba32f, binding = 0) uniform image2D img_output;
 
 uniform int width;
@@ -29,11 +29,12 @@ void main() {
         return;
     }
 
-    int xc = int(width-gl_GlobalInvocationID.x);
+    int xc = int(gl_GlobalInvocationID.x);
 
     float px = player.x;
     float py = player.y;
-    float pr = player.r + fov * ((float(xc) / float(width)) - .5f);
+	float a = fov * ((float(xc) / float(width - 1)) - .5f);
+    float pr = player.r + a;
     
     while (pr > 2.*PI) pr -= 2.*PI;
     while (pr < 0) pr += 2.*PI;
@@ -188,9 +189,9 @@ void main() {
 			imageStore(img_output, ivec2(xc, y), vec4(0, 0, 0, 1));
 		}
 	} else {
-		int line_height = int(float(height + 1) / (distance * cos(pr - player.r)));
+		int line_height = abs(int(float(height + 1) / (distance * cos(player.r - pr))));
 		if (line_height >= height) line_height = height - 1;
-		int line_offset = (height - line_height) / 2;
+		int line_offset = int((float(height) - float(line_height)) / 2.);
 		vec3 color = world_colors[block - 1];
 
 		for (int y = 0; y < line_offset; ++y) {
