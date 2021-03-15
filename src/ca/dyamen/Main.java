@@ -236,7 +236,7 @@ public class Main {
 
         computeShaderProgram.setUniform("width", WINDOW_WIDTH);
         computeShaderProgram.setUniform("height", WINDOW_HEIGHT);
-        computeShaderProgram.setUniform("fov", (float) Math.PI/2.f);
+        computeShaderProgram.setUniform("fov", (float) Math.PI/2.f - 0.01f);
         computeShaderProgram.setUniform("player", player);
         computeShaderProgram.setUniform("world_positions", world);
         computeShaderProgram.setUniform3("world_colors", world_colors);

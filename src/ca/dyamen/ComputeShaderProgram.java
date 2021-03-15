@@ -47,13 +47,13 @@ public class ComputeShaderProgram {
     }
 
     public void createComputeShader(String shaderPath) throws Exception {
-        computeShaderId = createShader(shaderPath, GL43.GL_COMPUTE_SHADER);
+        computeShaderId = createShader(shaderPath);
     }
 
-    protected int createShader(String shaderPath, int shaderType) throws Exception {
-        int shaderId = GL20.glCreateShader(shaderType);
+    protected int createShader(String shaderPath) throws Exception {
+        int shaderId = GL20.glCreateShader(GL43.GL_COMPUTE_SHADER);
         if (shaderId == 0) {
-            throw new Exception("Error creating shader. Type: " + shaderType);
+            throw new Exception("Error creating shader. Type: " + GL43.GL_COMPUTE_SHADER);
         }
 
         GL20.glShaderSource(shaderId, Utils.fileToString(Utils.ASSETS_DIRECTORY + "computeShaders" + Utils.SEPARATOR + shaderPath));
@@ -135,7 +135,7 @@ public class ComputeShaderProgram {
     public void use() {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texId);
         GL42.glBindImageTexture(0, texId, 0, false, 0, GL15.GL_WRITE_ONLY, GL30.GL_RGBA32F);
-        GL43.glDispatchCompute(tex_width, 1, 1); //TODO: adjust group size
+        GL43.glDispatchCompute(tex_width, 1, 1);
         GL42.glMemoryBarrier(GL42.GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
         GL11.glGetTexImage(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, GL30.GL_RGBA32F, data);
         GL42.glBindImageTexture(0, 0, 0, false, 0, GL15.GL_WRITE_ONLY, GL30.GL_RGBA32F);
@@ -157,36 +157,5 @@ public class ComputeShaderProgram {
         }
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
         GL11.glDeleteTextures(texId);
-    }
-
-    // ????
-    public static void printWorkGroupCapabilities() {
-        int workgroup_count[] = new int[3];
-        workgroup_count[0] = GL30.glGetInteger(GL43.GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0);
-        workgroup_count[1] = GL30.glGetInteger(GL43.GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1);
-        workgroup_count[2] = GL30.glGetInteger(GL43.GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2);
-
-        /*glGetIntegerri_v(GL43.GL_MAX_COMPUTE_WORK_GROUP_COUNT, 0, &workgroup_count[0]);
-        glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 1, &workgroup_count[1]);
-        glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, 2, &workgroup_count[2]);*/
-
-        System.out.printf ("Taille maximale des workgroups:\n\tx:%d\n\ty:%d\n\tz:%d\n",
-                workgroup_count[0], workgroup_count[1], workgroup_count[2]);
-
-        int workgroup_size[] = new int[3];
-        workgroup_size[0] = GL30.glGetInteger(GL43.GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0);
-        workgroup_size[1] = GL30.glGetInteger(GL43.GL_MAX_COMPUTE_WORK_GROUP_SIZE, 1);
-        workgroup_size[2] = GL30.glGetInteger(GL43.GL_MAX_COMPUTE_WORK_GROUP_SIZE, 2);
-        /*glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 0, &workgroup_size[0]);
-        glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 1, &workgroup_size[1]);
-        glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, 2, &workgroup_size[2]);*/
-
-        System.out.printf ("Nombre maximal d'invocation locale:\n\tx:%d\n\ty:%d\n\tz:%d\n",
-                workgroup_size[0], workgroup_size[1], workgroup_size[2]);
-
-        int workgroup_invocations = GL11.glGetInteger(GL43.GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS);
-
-        //glGetIntegerv (GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &workgroup_invocations);
-        System.out.printf ("Nombre maximum d'invocation de workgroups:\n\t%d\n", workgroup_invocations);
     }
 }
