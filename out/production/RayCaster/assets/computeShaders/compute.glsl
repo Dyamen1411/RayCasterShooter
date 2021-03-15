@@ -35,6 +35,7 @@ void main() {
     float py = player.y;
 	float a = fov * ((float(xc) / float(width - 1)) - .5f);
     float pr = player.r + a;
+	a = cos(a);
     
     while (pr > 2.*PI) pr -= 2.*PI;
     while (pr < 0) pr += 2.*PI;
@@ -189,12 +190,12 @@ void main() {
 			imageStore(img_output, ivec2(xc, y), vec4(0, 0, 0, 1));
 		}
 	} else {
-		int line_height = abs(int(float(height + 1) / (distance * cos(player.r - pr))));
+		int line_height = abs(int(float(height + 1) / (distance * a)));
 		if (line_height >= height) line_height = height - 1;
-		int line_offset = int((float(height) - float(line_height)) / 2.);
+		int line_offset = (height - line_height) / 2;
 		vec3 color = world_colors[block - 1];
 
-		for (int y = 0; y < line_offset; ++y) {
+		for (int y = 0; y <= line_offset; ++y) {
 			imageStore(img_output, ivec2(xc, y), vec4(0, 0, 0, 1));
 			imageStore(img_output, ivec2(xc, height - y - 1), vec4(0, 0, 0, 1));
 		}
