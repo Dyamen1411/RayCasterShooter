@@ -51,6 +51,12 @@ public class World {
         }
     }
 
+    public boolean isSolid(float x, float y) {
+        if (x < 0 || x >= width || y < 0 || y >= height) return false;
+
+        return data[(int) x + (int) y * width] != 0;
+    }
+
     public int getWidth() {
         return width;
     }

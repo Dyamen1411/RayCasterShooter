@@ -51,10 +51,10 @@ public class Main {
     }
 
     private void initializePlayer() {
-        player = new Player(8, 8);
+        player = new Player(8, 8, world);
     }
     
-    private void update() throws Exception {
+    private void update() {
         player.update();
     	Display.setTitle(String.format("pos: %8.8f %8.8f | rot: %8.8f", player.getX(), player.getY(), (float) (player.getRotation() / (2 * Math.PI))));
     }
