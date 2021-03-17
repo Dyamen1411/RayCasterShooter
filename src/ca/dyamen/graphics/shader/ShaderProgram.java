@@ -1,5 +1,6 @@
-package ca.dyamen;
+package ca.dyamen.graphics.shader;
 
+import ca.dyamen.util.Utils;
 import org.lwjgl.opengl.GL20;
 
 import java.util.HashMap;

@@ -1,5 +1,6 @@
-package ca.dyamen;
+package ca.dyamen.graphics.shader;
 
+import ca.dyamen.world.entities.Player;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.*;
 
@@ -50,13 +51,13 @@ public class ComputeShaderProgram {
         computeShaderId = createShader(shaderPath);
     }
 
-    protected int createShader(String shaderPath) throws Exception {
+    protected int createShader(String source) throws Exception {
         int shaderId = GL20.glCreateShader(GL43.GL_COMPUTE_SHADER);
         if (shaderId == 0) {
             throw new Exception("Error creating shader. Type: " + GL43.GL_COMPUTE_SHADER);
         }
 
-        GL20.glShaderSource(shaderId, Utils.fileToString(Utils.ASSETS_DIRECTORY + "computeShaders" + Utils.SEPARATOR + shaderPath));
+        GL20.glShaderSource(shaderId, source);
         GL20.glCompileShader(shaderId);
 
         if (GL20.glGetShaderi(shaderId, GL20.GL_COMPILE_STATUS) == 0) {
@@ -105,9 +106,9 @@ public class ComputeShaderProgram {
     }
 
     public void setUniform(String uniformName, Player player) {
-        setUniform(uniformName + ".x", player.x);
-        setUniform(uniformName + ".y", player.y);
-        setUniform(uniformName + ".r", player.r);
+        setUniform(uniformName + ".x", player.getX());
+        setUniform(uniformName + ".y", player.getY());
+        setUniform(uniformName + ".r", player.getRotation());
     }
 
     public void setUniform(String uniformName, int[] data) {
@@ -117,6 +118,12 @@ public class ComputeShaderProgram {
     }
 
     public void setUniform(String uniformName, float[] data) {
+        for (int i = 0; i < data.length; ++i) {
+            setUniform(uniformName + "[" + i + "]", data[i]);
+        }
+    }
+
+    public void setUniform(String uniformName, byte[] data) {
         for (int i = 0; i < data.length; ++i) {
             setUniform(uniformName + "[" + i + "]", data[i]);
         }

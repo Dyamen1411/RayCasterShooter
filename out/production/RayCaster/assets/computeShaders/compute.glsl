@@ -2,9 +2,7 @@
 
 #define PI 3.141592653589793238462643383279
 
-#define WORLD_X_SIZE 16
-#define WORLD_Y_SIZE 16
-#define WORLD_NUMBER_COLOR 4
+#include#
 
 #define RENDER_DISTANCE int(ceil((sqrt(WORLD_X_SIZE*WORLD_X_SIZE + WORLD_Y_SIZE*WORLD_Y_SIZE))))
 
@@ -21,6 +19,7 @@ uniform int width;
 uniform int height;
 uniform float fov;
 uniform Player player;
+
 uniform vec3 world_colors[WORLD_NUMBER_COLOR];
 uniform int world_positions[WORLD_X_SIZE * WORLD_Y_SIZE];
 
