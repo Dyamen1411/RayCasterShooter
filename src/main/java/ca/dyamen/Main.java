@@ -1,6 +1,7 @@
 package ca.dyamen;
 
 import ca.dyamen.graphics.Renderer;
+import ca.dyamen.graphics.window.Window;
 import ca.dyamen.util.Utils;
 import ca.dyamen.world.entities.Player;
 import ca.dyamen.world.World;
@@ -15,6 +16,8 @@ public class Main {
 
     private Player player;
 
+    private Window window;
+
     public Main() {
         try {
             initialize();
@@ -23,7 +26,7 @@ public class Main {
             e.printStackTrace();
         } finally {
             cleanup();
-            Display.destroy();
+            window.close();
         }
     }
 
@@ -35,9 +38,7 @@ public class Main {
     }
 
     private void initializeWindow() throws Exception {
-        DisplayMode displayMode = new DisplayMode(WINDOW_WIDTH, WINDOW_HEIGHT);
-        Display.setDisplayMode(displayMode);
-        Display.create();
+        window = new Window(WINDOW_WIDTH, WINDOW_HEIGHT, "RCS");
     }
 
     private void initializeWorld() throws Exception {
@@ -55,8 +56,8 @@ public class Main {
     }
     
     private void update() {
-        player.update();
-    	Display.setTitle(String.format("pos: %8.8f %8.8f | rot: %8.8f", player.getX(), player.getY(), (float) (player.getRotation() / (2 * Math.PI))));
+        player.update(window);
+        window.setTitle(String.format("pos: %8.8f %8.8f | rot: %8.8f", player.getX(), player.getY(), (float) (player.getRotation() / (2 * Math.PI))));
     }
     
     private void render() {
@@ -64,12 +65,12 @@ public class Main {
 
         renderer.render(player, (float) Math.PI / 2.f);
 
-        Display.update();
-        Display.sync(144);
+        // Cap FPS to 60 or 144 ?
+        window.update();
     }
     
     private void loop() throws Exception {
-        while (!Display.isCloseRequested()) {
+        while (!window.shouldClose()) {
         	update();
         	render();
         }
@@ -78,6 +79,9 @@ public class Main {
     private void cleanup() {
         if (renderer != null) {
             renderer.cleanup();
+        }
+        if (window != null) {
+            window.close();
         }
     }
 

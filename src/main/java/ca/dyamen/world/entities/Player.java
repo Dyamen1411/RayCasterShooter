@@ -1,7 +1,9 @@
 package ca.dyamen.world.entities;
 
+import ca.dyamen.graphics.window.Window;
 import ca.dyamen.world.World;
-import org.lwjgl.input.Keyboard;
+
+import org.lwjgl.glfw.GLFW;
 
 public class Player {
 	public static final float MOVE_SPEED = 0.01f;
@@ -28,12 +30,12 @@ public class Player {
 		this.world = world;
 	}
 
-    public void update() {
-		if (Keyboard.isKeyDown(Keyboard.KEY_C)) {
+    public void update(Window window) {
+		if (window.isKeyDown(GLFW.GLFW_KEY_C)) {
 			r += CAMERA_MOVE_SPEED;
 		}
 
-		if (Keyboard.isKeyDown(Keyboard.KEY_Z)) {
+		if (window.isKeyDown(GLFW.GLFW_KEY_Z)) {
 			r -= CAMERA_MOVE_SPEED;
 		}
 
@@ -43,22 +45,22 @@ public class Player {
 		float lambda_x = 0;
 		float lambda_y = 0;
 
-		if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+		if (window.isKeyDown(GLFW.GLFW_KEY_W)) {
 			lambda_x += (float) Math.cos(r) * MOVE_SPEED;
 			lambda_y += (float) Math.sin(r) * MOVE_SPEED;
 		}
 
-		if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+		if (window.isKeyDown(GLFW.GLFW_KEY_S)) {
 			lambda_x -= (float) Math.cos(r) * MOVE_SPEED;
 			lambda_y -= (float) Math.sin(r) * MOVE_SPEED;
 		}
 
-		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
+		if (window.isKeyDown(GLFW.GLFW_KEY_D)) {
 			lambda_x += (float) Math.cos(r + Math.PI / 2.) * MOVE_SPEED;
 			lambda_y += (float) Math.sin(r + Math.PI / 2.) * MOVE_SPEED;
 		}
 
-		if (Keyboard.isKeyDown(Keyboard.KEY_A)) {
+		if (window.isKeyDown(GLFW.GLFW_KEY_A)) {
 			lambda_x -= (float) Math.cos(r + Math.PI / 2.) * MOVE_SPEED;
 			lambda_y -= (float) Math.sin(r + Math.PI / 2.) * MOVE_SPEED;
 		}
