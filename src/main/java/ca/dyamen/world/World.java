@@ -3,8 +3,6 @@ package ca.dyamen.world;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.util.Arrays;
 
 public class World {
     private int width;
